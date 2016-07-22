@@ -1,0 +1,35 @@
+Microsoft Visual Studio Solution File, Format Version 11.00
+# Visual Studio 2008
+
+Project("{EA5558A7-53EC-5BA1-BE8E-14086FCA5D74}") = "ForestDefend", "Assembly-CSharp-firstpass.csproj", "{A39FC392-C5D7-5C23-74F5-65FA0CFDDAB8}"
+EndProject
+Project("{EA5558A7-53EC-5BA1-BE8E-14086FCA5D74}") = "ForestDefend", "Assembly-CSharp.csproj", "{4FC89760-7CF0-3BB6-7275-164F5C062C77}"
+EndProject
+Project("{EA5558A7-53EC-5BA1-BE8E-14086FCA5D74}") = "ForestDefend", "Assembly-UnityScript.unityproj", "{B856855A-3398-0866-1A27-4AAF336AC5E5}"
+EndProject
+Global
+	GlobalSection(SolutionConfigurationPlatforms) = preSolution
+		Debug|Any CPU = Debug|Any CPU
+		Release|Any CPU = Release|Any CPU
+	EndGlobalSection
+	GlobalSection(ProjectConfigurationPlatforms) = postSolution
+		{A39FC392-C5D7-5C23-74F5-65FA0CFDDAB8}.Debug|Any CPU.ActiveCfg = Debug|Any CPU
+		{A39FC392-C5D7-5C23-74F5-65FA0CFDDAB8}.Debug|Any CPU.Build.0 = Debug|Any CPU
+		{A39FC392-C5D7-5C23-74F5-65FA0CFDDAB8}.Release|Any CPU.ActiveCfg = Release|Any CPU
+		{A39FC392-C5D7-5C23-74F5-65FA0CFDDAB8}.Release|Any CPU.Build.0 = Release|Any CPU
+		{4FC89760-7CF0-3BB6-7275-164F5C062C77}.Debug|Any CPU.ActiveCfg = Debug|Any CPU
+		{4FC89760-7CF0-3BB6-7275-164F5C062C77}.Debug|Any CPU.Build.0 = Debug|Any CPU
+		{4FC89760-7CF0-3BB6-7275-164F5C062C77}.Release|Any CPU.ActiveCfg = Release|Any CPU
+		{4FC89760-7CF0-3BB6-7275-164F5C062C77}.Release|Any CPU.Build.0 = Release|Any CPU
+		{B856855A-3398-0866-1A27-4AAF336AC5E5}.Debug|Any CPU.ActiveCfg = Debug|Any CPU
+		{B856855A-3398-0866-1A27-4AAF336AC5E5}.Debug|Any CPU.Build.0 = Debug|Any CPU
+		{B856855A-3398-0866-1A27-4AAF336AC5E5}.Release|Any CPU.ActiveCfg = Release|Any CPU
+		{B856855A-3398-0866-1A27-4AAF336AC5E5}.Release|Any CPU.Build.0 = Release|Any CPU
+	EndGlobalSection
+	GlobalSection(SolutionProperties) = preSolution
+		HideSolutionNode = FALSE
+	EndGlobalSection
+	GlobalSection(MonoDevelopProperties) = preSolution
+		StartupItem = Assembly-CSharp.csproj
+	EndGlobalSection
+EndGlobal
