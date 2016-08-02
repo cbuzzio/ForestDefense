@@ -16,6 +16,8 @@ public class resourcesManager : MonoBehaviour {
 	[System.NonSerialized]
 	public float vidaCastillo = 100f;
 	// Use this for initialization
+
+
 	void Start () {
 	
 	}

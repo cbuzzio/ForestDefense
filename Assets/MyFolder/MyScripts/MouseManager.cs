@@ -16,6 +16,8 @@ public class MouseManager : MonoBehaviour {
 	public GameObject bosque;
 	SpriteRenderer[] sprites;
 	public GameObject Druida;
+	public GameObject flareFX_crear;
+	public GameObject flareFX_mejora;
 
 	// Use this for initialization
 	void Start () {
@@ -63,6 +65,8 @@ public class MouseManager : MonoBehaviour {
 						mejoraPanel.SetActive (true);
 					}
 				}
+			} else {
+				mejoraPanel.SetActive (false);
 			}
 
 		}
@@ -87,10 +91,62 @@ public class MouseManager : MonoBehaviour {
 
 	}
 
-	public void crearArbol(){
+	IEnumerator aparecer(GameObject original, Collider2D selectedTile){
+		GameObject flareGO = (GameObject)Instantiate(flareFX_crear,selectedTile.transform.position,Quaternion.identity);
+		LensFlare flare = flareGO.GetComponent<LensFlare> ();
+		while(flare.brightness < 1.5f){
+			flare.brightness = flare.brightness + 0.05f;
+			yield return null;
+		}
+		yield return new WaitForSeconds (0.5f);
+		selectedTile.GetComponent<tileScript>().planta = (GameObject)Instantiate (original, selectedTile.transform.position, original.transform.rotation);
+		while (flare.brightness > 0) {
+			flare.brightness = flare.brightness - 0.15f;
+			yield return null;
+		}
 
+	}
+
+	IEnumerator mejorar(Collider2D mejoraTile, int mejora){
+		GameObject flareGO = (GameObject)Instantiate(flareFX_mejora,mejoraTile.transform.position,Quaternion.identity);
+		LensFlare flare = flareGO.GetComponent<LensFlare> ();
+		while(flare.brightness < 3f){
+			flare.brightness = flare.brightness + 0.1f;
+			yield return null;
+		}
+		yield return new WaitForSeconds (0.5f);
+		switch (mejora) {
+		case 0:
+			mejoraTile.GetComponent<tileScript> ().planta.GetComponent<ArbolScript> ().setTipo (ArbolScript.ITipoArbol.DañoSimple);
+			break;
+		case 1:
+			mejoraTile.GetComponent<tileScript> ().planta.GetComponent<ArbolScript> ().setTipo (ArbolScript.ITipoArbol.DañoArea);
+			break;
+		case 2:
+			mejoraTile.GetComponent<tileScript> ().planta.GetComponent<FlorScript> ().setTipo (FlorScript.ITipoFlor.Rango);
+			break;
+		case 3:
+			mejoraTile.GetComponent<tileScript> ().planta.GetComponent<FlorScript> ().setTipo (FlorScript.ITipoFlor.Daño);
+			break;
+		case 4:
+			mejoraTile.GetComponent<tileScript> ().planta.GetComponent<ArbustoScript> ().setTipo (ArbustoScript.ITipoArbusto.Ralentizador);
+			break;
+		case 5:
+			mejoraTile.GetComponent<tileScript> ().planta.GetComponent<ArbustoScript> ().setTipo (ArbustoScript.ITipoArbusto.Debilitador);
+			break;
+		}
+		while (flare.brightness > 0) {
+			flare.brightness = flare.brightness - 0.15f;
+			yield return null;
+		}
+
+	}
+
+	public void crearArbol(){
+		
 		if (selectedTile.GetComponent<tileScript> ().ocupada == false) {
-			selectedTile.GetComponent<tileScript>().planta = (GameObject)Instantiate (arbolBase, selectedTile.transform.position, arbolBase.transform.rotation);
+//			selectedTile.GetComponent<tileScript>().planta = (GameObject)Instantiate (arbolBase, selectedTile.transform.position, arbolBase.transform.rotation);
+			StartCoroutine(aparecer(arbolBase,selectedTile));
 			selectedTile.GetComponent<tileScript> ().ocupada = true;
 			selectedTile.GetComponent<tileScript> ().tipo = tileScript.ITipoPlanta.Arbol;
 			semillas.SemillasArbol--;
@@ -101,7 +157,8 @@ public class MouseManager : MonoBehaviour {
 	public void crearFlor(){
 
 		if (selectedTile.GetComponent<tileScript> ().ocupada == false) {
-			selectedTile.GetComponent<tileScript>().planta = (GameObject)Instantiate (florBase, selectedTile.transform.position, florBase.transform.rotation);
+//			selectedTile.GetComponent<tileScript>().planta = (GameObject)Instantiate (florBase, selectedTile.transform.position, florBase.transform.rotation);
+			StartCoroutine(aparecer(florBase,selectedTile));
 			selectedTile.GetComponent<tileScript> ().ocupada = true;
 			selectedTile.GetComponent<tileScript> ().tipo = tileScript.ITipoPlanta.Flor;
 			Druida.GetComponent<Animator> ().SetBool ("Magia", true);
@@ -114,7 +171,8 @@ public class MouseManager : MonoBehaviour {
 	public void crearArbusto(){
 
 		if (selectedTile.GetComponent<tileScript> ().ocupada == false) {
-			selectedTile.GetComponent<tileScript>().planta = (GameObject)Instantiate (arbustoBase, selectedTile.transform.position, arbustoBase.transform.rotation);
+//			selectedTile.GetComponent<tileScript>().planta = (GameObject)Instantiate (arbustoBase, selectedTile.transform.position, arbustoBase.transform.rotation);
+			StartCoroutine(aparecer(arbustoBase,selectedTile));
 			selectedTile.GetComponent<tileScript> ().ocupada = true;
 			selectedTile.GetComponent<tileScript> ().tipo = tileScript.ITipoPlanta.Arbusto;
 			Druida.GetComponent<Animator> ().SetBool ("Magia", true);
@@ -129,7 +187,8 @@ public class MouseManager : MonoBehaviour {
 		if (mejoraTile != null) {
 			if (mejoraTile.GetComponent<tileScript> ().tipo == tileScript.ITipoPlanta.Arbol) {
 				if (mejoraTile.GetComponent<tileScript> ().planta.GetComponent<ArbolScript> ().tipoArbol == ArbolScript.ITipoArbol.Comun) {
-					mejoraTile.GetComponent<tileScript> ().planta.GetComponent<ArbolScript> ().setTipo (ArbolScript.ITipoArbol.DañoSimple);
+					StartCoroutine (mejorar (mejoraTile,0));
+//					mejoraTile.GetComponent<tileScript> ().planta.GetComponent<ArbolScript> ().setTipo (ArbolScript.ITipoArbol.DañoSimple);
 					Druida.GetComponent<Animator> ().SetBool ("Magia", true);
 				}
 			}
@@ -137,11 +196,13 @@ public class MouseManager : MonoBehaviour {
 		mejoraPanel.SetActive (false);
 			
 	}
+
 	public void mejorarArbolArea(){
 		if (mejoraTile != null) {
 			if (mejoraTile.GetComponent<tileScript> ().tipo == tileScript.ITipoPlanta.Arbol) {
 				if (mejoraTile.GetComponent<tileScript> ().planta.GetComponent<ArbolScript> ().tipoArbol == ArbolScript.ITipoArbol.Comun) {
-					mejoraTile.GetComponent<tileScript> ().planta.GetComponent<ArbolScript> ().setTipo (ArbolScript.ITipoArbol.DañoArea);
+					StartCoroutine (mejorar (mejoraTile,1));
+//					mejoraTile.GetComponent<tileScript> ().planta.GetComponent<ArbolScript> ().setTipo (ArbolScript.ITipoArbol.DañoArea);
 					Druida.GetComponent<Animator> ().SetBool ("Magia", true);
 
 				}
@@ -153,7 +214,8 @@ public class MouseManager : MonoBehaviour {
 		if (mejoraTile != null) {
 			if (mejoraTile.GetComponent<tileScript> ().tipo == tileScript.ITipoPlanta.Flor) {
 				if (mejoraTile.GetComponent<tileScript> ().planta.GetComponent<FlorScript> ().tipoFlor == FlorScript.ITipoFlor.Comun) {
-					mejoraTile.GetComponent<tileScript> ().planta.GetComponent<FlorScript> ().setTipo (FlorScript.ITipoFlor.Rango);
+					StartCoroutine (mejorar (mejoraTile,2));
+//					mejoraTile.GetComponent<tileScript> ().planta.GetComponent<FlorScript> ().setTipo (FlorScript.ITipoFlor.Rango);
 					Druida.GetComponent<Animator> ().SetBool ("Magia", true);
 				}
 			}
@@ -164,7 +226,8 @@ public class MouseManager : MonoBehaviour {
 		if (mejoraTile != null) {
 			if (mejoraTile.GetComponent<tileScript> ().tipo == tileScript.ITipoPlanta.Flor) {
 				if (mejoraTile.GetComponent<tileScript> ().planta.GetComponent<FlorScript> ().tipoFlor == FlorScript.ITipoFlor.Comun) {
-					mejoraTile.GetComponent<tileScript> ().planta.GetComponent<FlorScript> ().setTipo (FlorScript.ITipoFlor.Daño);
+					StartCoroutine (mejorar (mejoraTile,3));
+//					mejoraTile.GetComponent<tileScript> ().planta.GetComponent<FlorScript> ().setTipo (FlorScript.ITipoFlor.Daño);
 					Druida.GetComponent<Animator> ().SetBool ("Magia", true);
 				}
 			}
@@ -175,7 +238,8 @@ public class MouseManager : MonoBehaviour {
 		if (mejoraTile != null) {
 			if (mejoraTile.GetComponent<tileScript> ().tipo == tileScript.ITipoPlanta.Arbusto) {
 				if (mejoraTile.GetComponent<tileScript> ().planta.GetComponent<ArbustoScript> ().tipoArbusto == ArbustoScript.ITipoArbusto.Comun) {
-					mejoraTile.GetComponent<tileScript> ().planta.GetComponent<ArbustoScript> ().setTipo (ArbustoScript.ITipoArbusto.Ralentizador);
+					StartCoroutine (mejorar (mejoraTile,4));
+//					mejoraTile.GetComponent<tileScript> ().planta.GetComponent<ArbustoScript> ().setTipo (ArbustoScript.ITipoArbusto.Ralentizador);
 					Druida.GetComponent<Animator> ().SetBool ("Magia", true);
 
 				}
@@ -187,7 +251,8 @@ public class MouseManager : MonoBehaviour {
 		if (mejoraTile != null) {
 			if (mejoraTile.GetComponent<tileScript> ().tipo == tileScript.ITipoPlanta.Arbusto) {
 				if (mejoraTile.GetComponent<tileScript> ().planta.GetComponent<ArbustoScript> ().tipoArbusto == ArbustoScript.ITipoArbusto.Comun) {
-					mejoraTile.GetComponent<tileScript> ().planta.GetComponent<ArbustoScript> ().setTipo (ArbustoScript.ITipoArbusto.Debilitador);
+					StartCoroutine (mejorar (mejoraTile,5));
+//					mejoraTile.GetComponent<tileScript> ().planta.GetComponent<ArbustoScript> ().setTipo (ArbustoScript.ITipoArbusto.Debilitador);
 					Druida.GetComponent<Animator> ().SetBool ("Magia", true);
 
 				}

@@ -10,6 +10,7 @@ public class Buff : MonoBehaviour {
 	float aumentoVel;
 	float aumentoDeb;
 	bool tipo;
+	bool initiated = false;
 	// Use this for initialization
 	void Start () {
 
@@ -28,6 +29,9 @@ public class Buff : MonoBehaviour {
 		if (percentRange != 0 || percentDamage != 0) {
 			if (tipo == false) {
 				ArbolScript control = this.gameObject.GetComponent<ArbolScript> ();
+				if (control.tipoArbol != ArbolScript.ITipoArbol.Comun) {
+					initiated = true;
+				}
 				aumentoDaño = control.damage * percentDamage;
 				aumentoRango = control.range * percentRange;
 				control.damage += aumentoDaño;
@@ -35,6 +39,9 @@ public class Buff : MonoBehaviour {
 				control.range += aumentoRango;
 			} else {
 				ArbustoScript control = this.gameObject.GetComponent<ArbustoScript> ();
+				if (control.tipoArbusto != ArbustoScript.ITipoArbusto.Comun) {
+					initiated = true;
+				}
 				aumentoVel = control.SpeedDebuff * percentDamage;
 				aumentoDeb = control.ArmorDebuff * percentDamage;
 				aumentoRango = control.range * percentRange;
@@ -42,6 +49,12 @@ public class Buff : MonoBehaviour {
 				control.ArmorDebuff += aumentoDeb;
 //				Debug.Log (control.SpeedDebuff + " " + control.ArmorDebuff);
 				control.range += aumentoRango;
+				glowFX efecto = this.gameObject.GetComponentInChildren<glowFX> ();
+				if (efecto != null) {
+
+					efecto.range = efecto.range + aumentoRango;
+
+				}
 			}
 		}
 	
@@ -59,6 +72,14 @@ public class Buff : MonoBehaviour {
 			control.range -= aumentoRango;
 		}
 		Destroy (this);
+	
+	}
+
+	void Update(){
+	
+		if (!initiated) {
+			this.initiate ();
+		}
 	
 	}
 }

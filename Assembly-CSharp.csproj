@@ -58,6 +58,9 @@
      <Compile Include="Assets\MyFolder\MyScripts\Hit.cs" />
      <Compile Include="Assets\MyFolder\MyScripts\MouseManager.cs" />
      <Compile Include="Assets\MyFolder\MyScripts\PauseManager.cs" />
+     <Compile Include="Assets\MyFolder\MyScripts\explodeFX.cs" />
+     <Compile Include="Assets\MyFolder\MyScripts\explodeFX_Flare.cs" />
+     <Compile Include="Assets\MyFolder\MyScripts\glowFX.cs" />
      <Compile Include="Assets\MyFolder\MyScripts\resourcesManager.cs" />
      <Compile Include="Assets\MyFolder\MyScripts\tileScript.cs" />
      <Compile Include="Assets\MyFolder\STATS.cs" />

@@ -12,6 +12,7 @@ public class EnemyScript : MonoBehaviour {
 	public float velocity = 1f;
 	int i = 0;
 	bool llego = false;
+	public SpriteRenderer[] parts;
 	// Use this for initialization
 
 
@@ -20,6 +21,7 @@ public class EnemyScript : MonoBehaviour {
 		body = this.GetComponent<Rigidbody2D> ();
 		anim = this.GetComponent<Animator> ();
 		next = path [i];
+		parts = this.GetComponentsInChildren<SpriteRenderer> ();
 	}
 	
 	// Update is called once per frame
@@ -27,6 +29,17 @@ public class EnemyScript : MonoBehaviour {
 
 		if (vida <= 0) {
 			Destroy (this.gameObject);
+		}
+
+		if (parts [0].color.b < 1f) {
+		
+			foreach (SpriteRenderer i in parts) {
+				i.color = Color.Lerp (i.color, Color.white, Time.deltaTime * 5f);
+				if (i.color.b > 0.9f) {
+					i.color = Color.white;
+				}
+			}
+		
 		}
 
 		Vector3 dir = next.transform.position - this.transform.position ;
@@ -55,5 +68,10 @@ public class EnemyScript : MonoBehaviour {
 	public void takeDamage(float damage){
 //		Debug.Log (damage);
 		vida -= damage / armor;
+		foreach (SpriteRenderer i in parts) {
+		
+			i.color = Color.red;
+		
+		}
 	}
 }

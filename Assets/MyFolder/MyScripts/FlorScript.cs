@@ -10,8 +10,9 @@ public class FlorScript : MonoBehaviour {
 	}
 
 	float range = 0.5f;
-
+	public Sprite[] areasFX;
 	public Sprite[] spriteFlores;
+	public GameObject area;
 	SpriteRenderer sprite;
 
 	public ITipoFlor tipoFlor;
@@ -23,6 +24,7 @@ public class FlorScript : MonoBehaviour {
 	float timerAttack;
 
 	public void setTipo(ITipoFlor nuevoTipo){
+		SpriteRenderer efecto = area.GetComponent<SpriteRenderer> ();
 		tipoFlor = nuevoTipo;
 		switch (tipoFlor) {
 		case ITipoFlor.Comun:
@@ -30,6 +32,7 @@ public class FlorScript : MonoBehaviour {
 			DamageBuff = 0;
 			range = 2f;
 			sprite.sprite = spriteFlores [0];
+			area.SetActive (false);
 			break;
 
 		case ITipoFlor.Daño:
@@ -37,6 +40,8 @@ public class FlorScript : MonoBehaviour {
 			DamageBuff = 0.25f;
 			range = 2f;
 			sprite.sprite = spriteFlores [2];
+			efecto.sprite = areasFX [0];
+			area.SetActive (true);
 			break;
 
 		case ITipoFlor.Rango:
@@ -44,6 +49,8 @@ public class FlorScript : MonoBehaviour {
 			DamageBuff = 0f;
 			range = 2f;
 			sprite.sprite = spriteFlores [1];
+			efecto.sprite = areasFX [1];
+			area.SetActive (true);
 			break;
 		}
 	}
